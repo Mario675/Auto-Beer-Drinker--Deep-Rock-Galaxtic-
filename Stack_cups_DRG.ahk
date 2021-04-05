@@ -2,9 +2,10 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-^Esc::
-Exit
-
+!Esc::
+exitapp
+    
+#IfWinActive, ahk_exe  FSD-Win64-Shipping.exe
 
 ^J::
 
