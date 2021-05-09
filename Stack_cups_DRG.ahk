@@ -4,6 +4,9 @@ SetWorkingDir, %A_ScriptDir%
 #IfWinActive, ahk_exe  FSD-Win64-Shipping.exe
 
 
+ControlHwnd := ahk_class UnrealWindow
+
+
 
 
 !Esc::
@@ -13,57 +16,91 @@ exitapp
 
 move_right_because_more_players()
 {
-    send {d Down}
-    sleep 230
-    send {d up}
-    sleep 230
+    controlsend,, {d Down}, %ControlHwnd%
+    sleep 220
+    controlsend,, {d up}, %ControlHwnd%
+    sleep 220
     ;send a
 }
 
 move_left_because_more_players()
 {
-    send {a Down}
-    sleep 230
-    send {a up}
-    sleep 230
+    controlsend,, {a Down}, %ControlHwnd%
+    sleep 220
+    controlsend,, {a Up}, %ControlHwnd%
+    sleep 220
     ;send d
     
 }
 
 
-^L::
+^right::
 move_right_because_more_players()
 return
 
-^R::
+^left::
 move_left_because_more_players()
 return
 
+^q::
+order_leaf_lover()
+return
 
 pick_up_beer()
 {
-    send e ;pick it up
+    controlsend,, e, %ControlHwnd% ;pick it up
     sleep 1000
+}
+
+Alt_tab(grab_user_or_send_him_back)
+{
+    if grab_user_or_send_him_back = 0
+    {        
+        send {Alt Down}
+        send {Tab}
+        send {Alt Up}
+    }
+
+    if grab_user_or_send_him_back = 1
+    {
+        if !WinActive(%ControlHwnd%)
+        {
+            send {Alt Down}
+            send {Tab}
+            send {Alt Up}
+        }
+    }
 }
 
 order_leaf_lover()
 {
-    send e ;order a round
+    controlsend,, e, %ControlHwnd% ;order a round
     sleep 500
+
+    BlockInput, on
+    sleep 100
+    WinActivate, %ControlHwnd%
+    ;Alt_tab(1)
+    ;sleep 100
+
+    
+    ;ControlClick, x457 y741, %ControlHwnd%;,,,, Pos
     click 457, 741 ;Select Leaf lover
+    Alt_tab(0)
+    BlockInput, off
 
     sleep 500
 }
 
 drink_beer()
 {
-    click ; drink it
+    ControlClick,, %ControlHwnd% ; drink it
     sleep 7000 
 }
 
 throw_beer()
 {
-    click ; throw it.  
+    ControlClick,, %ControlHwnd% ; throw it.  
     sleep 1400
 }
 
